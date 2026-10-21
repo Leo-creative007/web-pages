@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jerarquía de memoria</title>
+  <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="memoria.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <div class="brand-icon"><i data-lucide="memory-stick"></i></div>
+        <span class="brand-title" data-i18n="brand">MEMO<span class="highlight">RIA</span></span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#hero" class="nav-link" data-i18n="nav_home">Inicio</a>
+        <a href="#features" class="nav-link" data-i18n="nav_levels">Niveles</a>
+        <a href="#latencia" class="nav-link" data-i18n="nav_latency">Latencia</a>
+        <a href="#simulador" class="nav-link" data-i18n="nav_sim">Simulador</a>
+        <a href="#about" class="nav-link" data-i18n="nav_concepts">Conceptos</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline" id="langToggle" type="button" aria-label="Cambiar idioma / Change language">EN</button>
+        <a href="#contacto" class="btn btn-primary nav-cta" data-i18n="nav_cta">Resumen</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menú">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section id="hero" class="hero-section">
+      <div class="hero-card">
+        <div class="hero-badge">
+          <i data-lucide="layers"></i>
+          <span data-i18n="hero_badge">Arquitectura de computadores</span>
+        </div>
+        <h1 class="hero-title" data-i18n="hero_title">Jerarquía de memoria: <span class="gradient-text">velocidad, capacidad y costo</span> en equilibrio</h1>
+        <p class="hero-subtitle" data-i18n="hero_sub">Cuanto más cerca del procesador, más rápida, más pequeña y más cara por byte es la memoria. Conoce los siete niveles de un computador actual.</p>
+        <div class="hero-buttons">
+          <a href="#features" class="btn btn-primary">
+            <span data-i18n="hero_btn1">Explorar niveles</span> <i data-lucide="arrow-down"></i>
+          </a>
+          <a href="#about" class="btn btn-outline" data-i18n="hero_btn2">Ver conceptos clave</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="two-columns-section">
+      <div class="column-left card">
+        <div class="card-badge"><i data-lucide="layers"></i> <span data-i18n="lv_badge">Siete niveles</span></div>
+        <h2 data-i18n="lv_title">De más rápido a más lento</h2>
+        <p class="text-muted" data-i18n="lv_sub">Elige un nivel para ver sus detalles.</p>
+        <div class="level-list" id="levelList"></div>
+      </div>
+
+      <div class="column-right card" id="levelDetail" aria-live="polite"></div>
+    </section>
+
+    <section id="latencia" class="card">
+      <div class="card-badge"><i data-lucide="timer"></i> <span data-i18n="lat_badge">Velocidad</span></div>
+      <h2 data-i18n="lat_title">Cuánto tarda cada nivel en responder</h2>
+      <p class="text-muted" data-i18n="lat_sub">Escala logarítmica: cada salto de nivel multiplica el tiempo de acceso.</p>
+      <div class="bars" id="latencyBars"></div>
+    </section>
+
+    <section id="simulador" class="sim-grid">
+      <div class="card">
+        <div class="card-badge"><i data-lucide="route"></i> <span data-i18n="j_badge">Simulador</span></div>
+        <h2 data-i18n="j_title">El viaje de un dato</h2>
+        <p class="text-muted" data-i18n="j_sub">Elige dónde está guardado el dato y mira cómo la CPU lo busca nivel por nivel.</p>
+        <div class="sim-controls">
+          <label for="whereSel" data-i18n="j_label">¿Dónde está el dato?</label>
+          <select id="whereSel"></select>
+          <button class="btn btn-primary" id="runJourney" type="button"><i data-lucide="play"></i> <span data-i18n="j_btn">Solicitar dato</span></button>
+        </div>
+        <div class="journey" id="journey"></div>
+        <p class="journey-res" id="journeyRes" aria-live="polite"></p>
+      </div>
+
+      <div class="card">
+        <div class="card-badge"><i data-lucide="calculator"></i> <span data-i18n="k_badge">Calculadora</span></div>
+        <h2 data-i18n="k_title">Tiempo medio de acceso</h2>
+        <p class="text-muted" data-i18n="k_sub">Mueve los controles y mira cuánto ayuda la caché.</p>
+        <div class="range-row"><label for="rngHit" data-i18n="k_hit">Tiempo de acierto</label><output id="valHit"></output>
+          <input type="range" id="rngHit" min="1" max="10" step="0.5" value="1"></div>
+        <div class="range-row"><label for="rngMiss" data-i18n="k_miss">Tasa de fallos</label><output id="valMiss"></output>
+          <input type="range" id="rngMiss" min="0" max="30" step="1" value="5"></div>
+        <div class="range-row"><label for="rngPen" data-i18n="k_pen">Penalización por fallo</label><output id="valPen"></output>
+          <input type="range" id="rngPen" min="20" max="200" step="5" value="80"></div>
+        <div class="calc-out"><span class="text-muted" data-i18n="k_out">Tiempo medio</span><strong id="calcOut"></strong><span class="highlight-green" id="calcGain"></span></div>
+        <div class="cmp">
+          <div><small data-i18n="k_with">Con caché</small><div class="bar-track"><div class="bar-fill" id="cmpWith" style="width:0"></div></div></div>
+          <div><small data-i18n="k_without">Sin caché (siempre RAM)</small><div class="bar-track"><div class="bar-fill cmp-bad" id="cmpWithout" style="width:100%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="extra-section card">
+      <div class="card-badge"><i data-lucide="lightbulb"></i> <span data-i18n="c_badge">Ideas clave</span></div>
+      <h2 data-i18n="c_title">Por qué funciona la jerarquía</h2>
+
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon"><i data-lucide="repeat"></i></div>
+          <h4 data-i18n="c1t">Localidad temporal</h4>
+          <p data-i18n="c1p">Si se accedió a un dato, es probable que se acceda de nuevo pronto.</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon"><i data-lucide="map-pin"></i></div>
+          <h4 data-i18n="c2t">Localidad espacial</h4>
+          <p data-i18n="c2p">Si se accedió a una dirección, es probable que se acceda a las cercanas.</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon"><i data-lucide="power"></i></div>
+          <h4 data-i18n="c3t">Volatilidad</h4>
+          <p data-i18n="c3p">Registros, cachés y RAM pierden su contenido al apagarse. SSD, HDD y cintas no.</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon"><i data-lucide="hard-drive"></i></div>
+          <h4 data-i18n="c4t">Memoria virtual</h4>
+          <p data-i18n="c4p">El sistema operativo mueve páginas entre RAM y disco para simular más memoria.</p>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <span class="text-muted" data-i18n="formula_label">Tiempo medio de acceso</span>
+        <code data-i18n="formula">T_medio = T_acierto + (tasa de fallos × penalización por fallo)</code>
+      </div>
+
+      <div class="pills-container">
+        <span class="pill"><i data-lucide="check-circle-2"></i> <span data-i18n="pill1">Cachés con 3D V-Cache</span></span>
+        <span class="pill"><i data-lucide="check-circle-2"></i> <span data-i18n="pill2">Memoria unificada (SoC)</span></span>
+        <span class="pill"><i data-lucide="check-circle-2"></i> <span data-i18n="pill3">HBM en GPU e IA</span></span>
+        <span class="pill"><i data-lucide="check-circle-2"></i> <span data-i18n="pill4">SSD NVMe y CXL</span></span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="contacto" class="site-footer">
+    <div class="footer-container">
+
+      <div class="footer-left">
+        <span class="footer-title" data-i18n="f_title">Gestión por niveles</span>
+        <p class="text-muted footer-note" data-i18n="f_note">Registros: el compilador.<br>Cachés: el hardware.<br>RAM y disco: el sistema operativo.</p>
+      </div>
+
+      <div class="footer-center">
+        <div class="performance-card">
+          <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 100 50">
+              <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" />
+              <path class="gauge-fill" id="gaugeFill" d="M 10 50 A 40 40 0 0 1 90 50" />
+            </svg>
+            <div class="gauge-icon-center"><i data-lucide="gauge"></i></div>
+          </div>
+          <div class="performance-info">
+            <span class="performance-title" data-i18n="perf_title">Aciertos en caché</span>
+            <span class="performance-score" id="scoreText">98/100</span>
+          </div>
+        </div>
+        <div class="footer-lines">
+          <div class="line line-1"></div>
+          <div class="line line-2"></div>
+          <div class="line line-3"></div>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <div class="action-card">
+          <span class="action-label" data-i18n="f_ask">¿Quieres repasar?</span>
+          <a href="#features" class="btn btn-primary action-btn">
+            <span data-i18n="f_btn">Volver a los niveles</span> <i data-lucide="arrow-up"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p data-i18n="f_bottom">Valores típicos de equipos actuales; varían según el modelo.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
