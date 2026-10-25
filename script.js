@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const UI = {
-    es: { jHint: 'Pulsa «Solicitar dato» para iniciar.', hit: 'acierto', miss: 'fallo', jDone: (n, t) => `El dato estaba en ${n}. Buscarlo tardó en total ${t}.`, gain: x => `${x}× más rápido que ir siempre a RAM`, level: (i, n) => `Nivel ${i} de ${n}`, tech: 'Tecnología', cap: 'Capacidad típica', lat: 'Tiempo de acceso', mgr: 'Gestionada por', title: 'Jerarquía de memoria', toggle: 'EN' },
-    en: { jHint: 'Press “Request data” to start.', hit: 'hit', miss: 'miss', jDone: (n, t) => `The data was in ${n}. Finding it took ${t} in total.`, gain: x => `${x}× faster than always going to RAM`, level: (i, n) => `Level ${i} of ${n}`, tech: 'Technology', cap: 'Typical capacity', lat: 'Access time', mgr: 'Managed by', title: 'Memory hierarchy', toggle: 'ES' }
+    es: { toLight: 'Cambiar a modo claro', toDark: 'Cambiar a modo oscuro', jHint: 'Pulsa «Solicitar dato» para iniciar.', hit: 'acierto', miss: 'fallo', jDone: (n, t) => `El dato estaba en ${n}. Buscarlo tardó en total ${t}.`, gain: x => `${x}× más rápido que ir siempre a RAM`, level: (i, n) => `Nivel ${i} de ${n}`, tech: 'Tecnología', cap: 'Capacidad típica', lat: 'Tiempo de acceso', mgr: 'Gestionada por', title: 'Jerarquía de memoria', toggle: 'EN' },
+    en: { toLight: 'Switch to light mode', toDark: 'Switch to dark mode', jHint: 'Press “Request data” to start.', hit: 'hit', miss: 'miss', jDone: (n, t) => `The data was in ${n}. Finding it took ${t} in total.`, gain: x => `${x}× faster than always going to RAM`, level: (i, n) => `Level ${i} of ${n}`, tech: 'Technology', cap: 'Typical capacity', lat: 'Access time', mgr: 'Managed by', title: 'Memory hierarchy', toggle: 'ES' }
   };
 
   // Cada texto es [español, inglés]
@@ -227,6 +227,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   rng.forEach(r => r.addEventListener('input', renderCalc));
 
+  /* ---------- Tema claro / oscuro ---------- */
+  const themeBtn = document.getElementById('themeToggle');
+  const getTheme = () => document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+
+  function applyTheme() {
+    const light = getTheme() === 'light';
+    const label = light ? UI[lang].toDark : UI[lang].toLight;
+    themeBtn.innerHTML = `<i data-lucide="${light ? 'moon' : 'sun'}"></i>`;   // muestra a qué modo se cambia
+    themeBtn.setAttribute('aria-label', label);
+    themeBtn.title = label;
+    icons();
+  }
+
+  themeBtn.addEventListener('click', () => {
+    const next = getTheme() === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    applyTheme();
+  });
+
   /* ---------- Aplicar idioma ---------- */
   function applyLang() {
     document.documentElement.lang = lang;
@@ -237,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBars();
     renderJourney();
     renderCalc();
+    applyTheme();
     document.getElementById('langToggle').textContent = UI[lang].toggle;
     document.getElementById('menuToggle').setAttribute('aria-label', lang === 'es' ? 'Menú' : 'Menu');
     renderList();
