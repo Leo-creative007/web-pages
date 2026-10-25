@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jerarquía de memoria</title>
+  <script>
+    /* Tema inicial antes de pintar, para evitar parpadeo */
+    try { document.documentElement.dataset.theme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); } catch (e) {}
+  </script>
   <link rel="stylesheet" href="estilo.css">
   <link rel="stylesheet" href="memoria.css">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -26,6 +30,7 @@
       </nav>
 
       <div class="nav-actions">
+        <button class="btn btn-outline theme-btn" id="themeToggle" type="button" aria-label="Cambiar tema"><i data-lucide="sun"></i></button>
         <button class="btn btn-outline" id="langToggle" type="button" aria-label="Cambiar idioma / Change language">EN</button>
         <a href="#contacto" class="btn btn-primary nav-cta" data-i18n="nav_cta">Resumen</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Menú">
