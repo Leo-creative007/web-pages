@@ -135,3 +135,19 @@ body, .card, .navbar, .site-footer { transition: background-color 0.3s ease, col
 [data-theme="light"] .node.miss { background: rgba(220, 38, 38, 0.08); border-color: #dc2626; }
 [data-theme="light"] .node.miss small { color: #dc2626; }
 [data-theme="light"] .sim-controls select { background: #fff; }
+
+/* Ilustraciones de los componentes */
+.art { margin: 8px 0 0; }
+.art-box { background: rgba(15, 23, 42, 0.35); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; }
+[data-theme="light"] .art-box { background: rgba(15, 23, 42, 0.04); }
+.art svg { display: block; width: 100%; max-height: 230px; animation: artIn 0.45s ease; }
+.art figcaption { margin-top: 10px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+.art .st { fill: none; stroke: var(--lv); stroke-width: 2; }
+.art .dim { opacity: 0.55; }
+.art .fl { fill: var(--lv); fill-opacity: 0.15; stroke: var(--lv); stroke-width: 1.5; }
+.art .fl.on { fill-opacity: 0.85; }
+.art .ct { fill: none; stroke: var(--lv); stroke-width: 8; stroke-dasharray: 3 3; }
+.art .tx { fill: var(--text-main); font: 600 9px system-ui, sans-serif; opacity: 0.85; }
+.art .ton { fill: #0f172a; opacity: 1; }
+@keyframes artIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .art svg { animation: none; } }
