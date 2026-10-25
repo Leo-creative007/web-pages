@@ -126,6 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
     <path class="fl on" transform="translate(20 0)" d="M232 125h52a22 22 0 0 0 3-43 30 30 0 0 0-57-8 25 25 0 0 0 2 51z"/>
     <text class="tx" x="57" y="152" text-anchor="middle">HDD</text><text class="tx" x="161" y="152" text-anchor="middle">TAPE</text><text class="tx" x="282" y="152" text-anchor="middle">CLOUD</text></svg>`;
 
+  // Estilos de las ilustraciones: van dentro del propio script para no depender de memoria.css
+  const ARTCSS = `.art .st{fill:none;stroke:var(--lv);stroke-width:2}.art .dim{opacity:.55}
+    .art .fl{fill:var(--lv);fill-opacity:.15;stroke:var(--lv);stroke-width:1.5}.art .fl.on{fill-opacity:.85}
+    .art .ct{fill:none;stroke:var(--lv);stroke-width:8;stroke-dasharray:3 3}
+    .art .tx{fill:var(--text-main,#e2e8f0);font:600 9px system-ui,sans-serif;opacity:.9}.art .ton{fill:#0f172a;opacity:1}`;
+  const BOX = 'padding:16px;border:1px solid rgba(148,163,184,.3);border-radius:16px;background:rgba(127,127,127,.1)';
+  const sized = svg => svg.replace('<svg ', '<svg style="display:block;width:100%;max-height:230px" ');
+
   const art = [
     { art: () => cpuArt('reg'), cap: ['Dentro de cada núcleo de la CPU', 'Inside each CPU core'] },
     { art: () => cpuArt('l1'),  cap: ['Pegada a cada núcleo, dentro del chip', 'Right next to each core, inside the chip'] },
@@ -195,7 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="detail-item"><span>${u.mgr}</span><strong>${L(l.mgr)}</strong></div>
       </div>
       <figure class="art" style="--lv:hsl(${195 - current * 28}, 85%, 60%)">
-        <div class="art-box">${l.art()}</div>
+        <style>${ARTCSS}</style>
+        <div class="art-box" style="${BOX}">${sized(l.art())}</div>
         <figcaption>${L(l.artCap)}</figcaption>
       </figure>`;
     icons();
