@@ -87,6 +87,56 @@ document.addEventListener('DOMContentLoaded', () => {
              'Cheap, massive storage. The slowest level, ideal for backups and archives.'] }
   ];
 
+  /* ---------- Ilustraciones SVG de cada nivel ---------- */
+  const cpuArt = (hi) => {
+    const fl = k => hi === k ? 'fl on' : 'fl';
+    const tx = (k, x, y, t) => `<text class="tx${hi === k ? ' ton' : ''}" x="${x}" y="${y}" text-anchor="middle">${t}</text>`;
+    const pins = [...Array(7)].map((_, i) => `M${90 + i * 23} 2v8M${90 + i * 23} 160v8`).join('') +
+                 [...Array(6)].map((_, i) => `M52 ${25 + i * 24}h8M260 ${25 + i * 24}h8`).join('');
+    const cores = [0, 1].map(c => { const x = 76 + c * 92; return `
+      <rect class="st dim" x="${x}" y="22" width="84" height="80" rx="6"/>
+      <rect class="${fl('reg')}" x="${x + 8}" y="30" width="68" height="14" rx="3"/>${tx('reg', x + 42, 40, 'REG')}
+      <rect class="${fl('l1')}" x="${x + 8}" y="50" width="68" height="14" rx="3"/>${tx('l1', x + 42, 60, 'L1')}
+      <rect class="${fl('l2')}" x="${x + 8}" y="70" width="68" height="24" rx="3"/>${tx('l2', x + 42, 85, 'L2')}`; }).join('');
+    return `<svg viewBox="0 0 320 170" role="img" aria-hidden="true">
+      <path class="st dim" d="${pins}"/><rect class="st" x="60" y="10" width="200" height="150" rx="12"/>${cores}
+      <rect class="${fl('l3')}" x="76" y="112" width="176" height="38" rx="6"/>${tx('l3', 164, 135, 'L3')}</svg>`;
+  };
+
+  const ramArt = () => `<svg viewBox="0 0 320 170" role="img" aria-hidden="true">
+    <rect class="st" x="25" y="40" width="270" height="78" rx="6"/>
+    ${[...Array(8)].map((_, i) => `<rect class="fl on" x="${42 + i * 31}" y="54" width="24" height="34" rx="3"/>`).join('')}
+    <path class="ct" d="M32 126H288"/><path class="st" d="M150 118v-8h20v8"/>
+    <text class="tx" x="160" y="106" text-anchor="middle">DDR5</text></svg>`;
+
+  const ssdArt = () => `<svg viewBox="0 0 320 170" role="img" aria-hidden="true">
+    <rect class="st" x="45" y="50" width="240" height="70" rx="6"/>
+    <path class="ct" d="M30 62v46"/>
+    <rect class="fl on" x="62" y="64" width="46" height="42" rx="4"/>
+    ${[0, 1, 2].map(i => `<rect class="fl" x="${120 + i * 54}" y="64" width="46" height="42" rx="4"/>`).join('')}
+    <text class="tx ton" x="85" y="89" text-anchor="middle">CTRL</text>
+    ${[0, 1, 2].map(i => `<text class="tx" x="${143 + i * 54}" y="89" text-anchor="middle">NAND</text>`).join('')}
+    <text class="tx" x="165" y="140" text-anchor="middle">NVMe · M.2</text></svg>`;
+
+  const massArt = () => `<svg viewBox="0 0 320 170" role="img" aria-hidden="true">
+    <rect class="st" x="12" y="35" width="90" height="100" rx="7"/>
+    <circle class="st" cx="57" cy="85" r="30"/><circle class="fl on" cx="57" cy="85" r="7"/><path class="st" d="M90 48L62 82"/>
+    <rect class="st" x="118" y="50" width="86" height="70" rx="7"/>
+    <circle class="fl on" cx="144" cy="82" r="13"/><circle class="fl on" cx="178" cy="82" r="13"/><path class="st" d="M132 108h60"/>
+    <path class="fl on" transform="translate(20 0)" d="M232 125h52a22 22 0 0 0 3-43 30 30 0 0 0-57-8 25 25 0 0 0 2 51z"/>
+    <text class="tx" x="57" y="152" text-anchor="middle">HDD</text><text class="tx" x="161" y="152" text-anchor="middle">TAPE</text><text class="tx" x="282" y="152" text-anchor="middle">CLOUD</text></svg>`;
+
+  const art = [
+    { art: () => cpuArt('reg'), cap: ['Dentro de cada núcleo de la CPU', 'Inside each CPU core'] },
+    { art: () => cpuArt('l1'),  cap: ['Pegada a cada núcleo, dentro del chip', 'Right next to each core, inside the chip'] },
+    { art: () => cpuArt('l2'),  cap: ['Junto a cada núcleo, dentro del chip', 'Beside each core, inside the chip'] },
+    { art: () => cpuArt('l3'),  cap: ['Bloque compartido por todos los núcleos', 'A block shared by all the cores'] },
+    { art: ramArt, cap: ['Módulo DIMM con chips DRAM (DDR5)', 'DIMM module with DRAM chips (DDR5)'] },
+    { art: ssdArt, cap: ['SSD NVMe M.2: controlador y chips NAND', 'M.2 NVMe SSD: controller and NAND chips'] },
+    { art: massArt, cap: ['Disco duro, cinta magnética y nube', 'Hard drive, magnetic tape and cloud'] }
+  ];
+  art.forEach((a, i) => Object.assign(levels[i], { art: a.art, artCap: a.cap }));
+
   let lang = 'es';
   let current = 0;
   try { lang = localStorage.getItem('lang') === 'en' ? 'en' : 'es'; } catch (e) {}
@@ -143,7 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="detail-item"><span>${u.cap}</span><strong>${L(l.cap)}</strong></div>
         <div class="detail-item"><span>${u.lat}</span><strong>${L(l.lat)}</strong></div>
         <div class="detail-item"><span>${u.mgr}</span><strong>${L(l.mgr)}</strong></div>
-      </div>`;
+      </div>
+      <figure class="art" style="--lv:hsl(${195 - current * 28}, 85%, 60%)">
+        <div class="art-box">${l.art()}</div>
+        <figcaption>${L(l.artCap)}</figcaption>
+      </figure>`;
     icons();
   }
 
