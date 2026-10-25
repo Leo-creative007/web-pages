@@ -96,3 +96,42 @@
 .cmp-bad { background: linear-gradient(90deg, #f87171, #fb923c); }
 
 @media (max-width: 1024px) { .sim-grid { grid-template-columns: 1fr; } }
+
+/* Botón de tema */
+.theme-btn { padding: 10px 12px; }
+.theme-btn svg { width: 20px; height: 20px; }
+body, .card, .navbar, .site-footer { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+
+/* Modo claro: sobrescribe variables y colores fijos de estilo.css */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-dark: #eef2f7;
+  --bg-card: #ffffff;
+  --bg-card-hover: #e2e8f0;
+  --accent-blue: #0284c7;
+  --accent-cyan: #0e7490;
+  --accent-green: #059669;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --border-color: rgba(15, 23, 42, 0.14);
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+
+[data-theme="light"] .navbar { background-color: rgba(255, 255, 255, 0.88); }
+[data-theme="light"] .hero-section { background: linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, var(--bg-card) 100%); }
+[data-theme="light"] .stat-item,
+[data-theme="light"] .feature-box,
+[data-theme="light"] .action-card,
+[data-theme="light"] .detail-item,
+[data-theme="light"] .formula-box,
+[data-theme="light"] .level-btn,
+[data-theme="light"] .node,
+[data-theme="light"] .bar-track { background: rgba(15, 23, 42, 0.05); }
+[data-theme="light"] .level-btn:hover { background: var(--bg-card-hover); }
+[data-theme="light"] .performance-card { background: linear-gradient(145deg, #f8fafc, #e2e8f0); box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.18); }
+[data-theme="light"] .gauge-bg { stroke: #cbd5e1; }
+[data-theme="light"] .footer-bottom { border-top-color: rgba(15, 23, 42, 0.1); }
+[data-theme="light"] .nav-links { box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15); }
+[data-theme="light"] .node.miss { background: rgba(220, 38, 38, 0.08); border-color: #dc2626; }
+[data-theme="light"] .node.miss small { color: #dc2626; }
+[data-theme="light"] .sim-controls select { background: #fff; }
